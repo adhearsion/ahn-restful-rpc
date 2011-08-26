@@ -65,7 +65,7 @@ RESTFUL_API_HANDLER = lambda do |env|
 end
 
 initialization do
-  config = COMPONENTS.restful_rpc
+  config = COMPONENTS.send :'ahn-restful-rpc'
 
   api = RESTFUL_API_HANDLER
 
