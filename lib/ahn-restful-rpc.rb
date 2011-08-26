@@ -13,11 +13,11 @@ def ip_allowed?(ip)
 
   octets = ip.split "."
 
-  case COMPONENTS.restful_rpc["access"]
+  case COMPONENTS.send(:'ahn-restful-rpc')["access"]
     when "everyone"
       true
     when "whitelist"
-      whitelist = COMPONENTS.restful_rpc["whitelist"]
+      whitelist = COMPONENTS.send(:'ahn-restful-rpc')["whitelist"]
       !! whitelist.find do |pattern|
         pattern_octets = pattern.split "."
         # Traverse both arrays in parallel
@@ -26,7 +26,7 @@ def ip_allowed?(ip)
         end == [true, true, true, true]
       end
     when "blacklist"
-      blacklist = COMPONENTS.restful_rpc["blacklist"]
+      blacklist = COMPONENTS.send(:'ahn-restful-rpc')["blacklist"]
       ! blacklist.find do |pattern|
         pattern_octets = pattern.split "."
         # Traverse both arrays in parallel
@@ -47,7 +47,7 @@ RESTFUL_API_HANDLER = lambda do |env|
 
   json = JSON.parse json
 
-  nesting = COMPONENTS.restful_rpc["path_nesting"]
+  nesting = COMPONENTS.send(:'ahn-restful-rpc')["path_nesting"]
   path = env["PATH_INFO"]
 
   return [404, {}, "This resource does not respond to #{path.inspect}"] unless path[0...nesting.size] == nesting
