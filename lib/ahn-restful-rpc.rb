@@ -60,6 +60,10 @@ RESTFUL_API_HANDLER = lambda do |env|
 
   # TODO: set the content-type and other HTTP headers
   response_object = rpc_object.send(path, *json)
+  if defined? response_object.headers
+    return [200, {"Content-Type" => "application/json"}, Array(response_object.headers.to_json)]
+  end
+  
   [200, {"Content-Type" => "application/json"}, Array(response_object.to_json)]
 
 end
